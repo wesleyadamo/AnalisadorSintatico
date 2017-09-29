@@ -1,10 +1,15 @@
 package compiladoresAS;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+
+import analisadorLexico.Scan;
+import analisadorLexico.Token;
 
 public class AnalisadorSintatico {
 
@@ -154,6 +159,16 @@ public class AnalisadorSintatico {
 		tabela.put("StmtLista1 ;", si.p);
 		tabela.put("StmtLista1 int", si.p);
 		tabela.put("StmtLista1 =", si.p);
+		tabela.put("StmtLista1 /", si.p);
+		tabela.put("StmtLista1 )", si.p);
+		tabela.put("StmtLista1 *", si.p);
+
+		
+
+		
+
+		
+		
 
 		si = new StackInput();
 		si.setarProducoa(" ");
@@ -203,6 +218,12 @@ public class AnalisadorSintatico {
 		vet = new String[] { ";" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt ;", si.p);
+		
+		
+		si = new StackInput();
+		vet = new String[] { "*" };
+		si.setarProducoa(vet);
+		tabela.put("Stmt *", si.p);
 
 		si = new StackInput();
 		vet = new String[] { "CompStmt" };
@@ -213,7 +234,24 @@ public class AnalisadorSintatico {
 		vet = new String[] { "ForStmt" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt for", si.p);
-
+		
+		si = new StackInput();
+		vet = new String[] { "/" };
+		si.setarProducoa(vet);
+		tabela.put("Stmt /", si.p);
+		
+		si = new StackInput();
+		vet = new String[] { "ForStmt" };
+		si.setarProducoa(vet);
+		tabela.put("Stmt for", si.p);
+		
+		
+		si = new StackInput();
+		vet = new String[] { ")" };
+		si.setarProducoa(vet);
+		tabela.put("Stmt )", si.p);
+		
+		
 		si = new StackInput();
 		vet = new String[] { "WhileStmt" };
 		si.setarProducoa(vet);
@@ -490,7 +528,7 @@ public class AnalisadorSintatico {
 		return tabela.get(p + " " + e);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		AnalisadorSintatico as = new AnalisadorSintatico();
 		
 		
@@ -501,7 +539,7 @@ public class AnalisadorSintatico {
 		
 		
 		as.setarTabela();
-		as.entrada.push("}");
+	/*	as.entrada.push("}");
 		as.entrada.push("}");
 		as.entrada.push("}");
 		
@@ -574,7 +612,25 @@ as.entrada.push("{");
 		as.entrada.push(")");
 		as.entrada.push("(");
 		as.entrada.push("id");
-		as.entrada.push("int");
+		as.entrada.push("int");*/
+		
+		Scan s = new Scan();
+		
+		ArrayList<Token> tokens = s.obterTokens();
+		
+		
+		System.out.println();
+		for(Token t : tokens){
+			System.out.println(t.getAtributo()+"");
+		}
+		
+		System.out.println();
+		int i;
+		
+		for( i= tokens.size()-1; i >=0 ; i-- )
+		{
+			as.entrada.push(tokens.get(i).getAtributo());
+		}
 
 		Producao02 p2 = as.action(as.entrada.peek(), as.pilha.peek());
 
@@ -586,12 +642,12 @@ as.entrada.push("{");
 			as.pilha.push(p);
 		}
 
-		as.interar();
+	//	// as.interar();
 		// testa se as entrada são iguais
 		while (!as.pilha.isEmpty() && !as.entrada.peek().equals("$")) {
 			p2 = as.action(as.entrada.peek(), as.pilha.peek());
 
-			as.interar();
+			//// as.interar();
 			System.out.println("PILHA NO TOPO ANTES DE REMOVER: " + as.pilha.peek()+""+as.entrada.peek());
 
 			if (!(p2.producao.get(0).equalsIgnoreCase(" "))){
@@ -602,15 +658,15 @@ as.entrada.push("{");
 			}
 			System.out.println("PILHA NO TOPO DEPOIS DE REMOVER: " + as.pilha.peek());
 
-			as.interar();
+			// as.interar();
 
 			for (String p : p2.producao) {
 				if (p.equals(" ")) {
-					as.interar();
+					// as.interar();
 					as.pilha.pop();
 					System.out.println("DESIMPILHAR " + as.entrada.peek());
 					//as.entrada.pop();
-					as.interar();
+					// as.interar();
 
 				} else{
 					as.pilha.push(p);
@@ -623,7 +679,7 @@ as.entrada.push("{");
 			// compara se as entrada são iguais
 			while (as.pilha.peek().equals(as.entrada.peek()) && !as.pilha.peek().equals("$")) {
 
-				as.interar();
+				// as.interar();
 				System.out.println("entrou no igual");
 				System.out.println("PILHA TOPO: " + as.pilha.peek());
 				System.out.println("entrada TOPO: " + as.entrada.peek());
