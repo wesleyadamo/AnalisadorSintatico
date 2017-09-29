@@ -16,8 +16,8 @@ public class Scan {
 
 	static Map<String, Token> tabelaSimbolos = new HashMap<String, Token>();
 	static StringBuffer strFinal = new StringBuffer();
-	
-	static ArrayList<Token> tokens =  new ArrayList<Token>();
+
+	static ArrayList<Token> tokens = new ArrayList<Token>();
 
 	public static void criarTabela() {
 		tabelaSimbolos.put("int", new Token("int", "int"));
@@ -49,25 +49,28 @@ public class Scan {
 
 	public static void tabelaSimbolos(String str) {
 
-		System.out.println("str: "+ str);
+		// System.out.println("str: "+ str);
 		if (tabelaSimbolos.containsKey(str)) {
-			strFinal.append("< " + tabelaSimbolos.get(str).getNome() + " , " + tabelaSimbolos.get(str).getAtributo() + " >  ");
+			strFinal.append(
+					"< " + tabelaSimbolos.get(str).getNome() + " , " + tabelaSimbolos.get(str).getAtributo() + " >  ");
 			tokens.add(tabelaSimbolos.get(str));
 
 		} else {
-			System.out.println("STR ADD: +" );
+			// System.out.println("STR ADD: +" );
 			Token tk = new Token(str, "id");
 			tabelaSimbolos.put(str, tk);
-			strFinal.append("<"+str+", id>");
+			strFinal.append("<" + str + ", id>");
 			tokens.add(tk);
 
 		}
 
 	}
 
-  public ArrayList<Token> obterTokens() throws IOException{
-	  char[] aux = null;
-		
+	public ArrayList<Token> obterTokens() throws IOException {
+		char[] aux = null;
+
+		boolean erro = false;
+
 		try {
 
 			criarTabela();
@@ -99,7 +102,8 @@ public class Scan {
 
 						i--;
 						// System.out.println("Valor lido: "+str.toString());
-						tabelaSimbolos(str.toString()); // pesquisa na tabela de símbolos
+						tabelaSimbolos(str.toString()); // pesquisa na tabela de
+														// símbolos
 						str.delete(0, str.length()); // limpa a string auxiliar
 						estado = 1;
 
@@ -112,7 +116,8 @@ public class Scan {
 				case 2: // atributos relacionais
 
 					boolean found = false;
-					if (buffer[i] == ';' || buffer[i] == '{' || buffer[i] == '}' || buffer[i] == '(' || buffer[i] == ')') {
+					if (buffer[i] == ';' || buffer[i] == '{' || buffer[i] == '}' || buffer[i] == '('
+							|| buffer[i] == ')') {
 
 						tabelaSimbolos(str.append(buffer[i]).toString());
 						str.delete(0, str.length());
@@ -147,7 +152,8 @@ public class Scan {
 							found = true;
 							break;
 						} else {
-							strFinal.append("Erro léxico em !");
+							strFinal.append("Erro léxico em " + buffer[i]);
+							erro = true;
 							i--;
 						}
 
@@ -197,12 +203,18 @@ public class Scan {
 
 					break;
 				case 3:
-
+					////////////////// modificado e verificado
 					found = false;
 					if (buffer[i] == '+') {
 						str.append('+');
-						if (buffer[++i] == '+')
-							str.append('+');
+						int temp = ++i;
+						if (buffer[temp] == '+' || (!(Character.isLetterOrDigit(buffer[temp]))
+								&& !Character.isWhitespace(buffer[temp]))) {
+							System.out.println("erro lexico na expressoa " + buffer[temp]);
+							erro = true;
+							// str.append(" Erro léxico em "+ buffer[i]);
+						}
+						// str.append('+');
 						else
 							--i;
 
@@ -228,13 +240,16 @@ public class Scan {
 						break;
 
 					}
-
+					// foi alterado ok!
 					if (buffer[i] == '*') {
-						str.append('*');
-						if (buffer[++i] == '*')
-							str.append('*');
-						else
+						int temp = ++i;
+						if (buffer[temp] == '*' || !(Character.isLetterOrDigit(buffer[temp]))) {
+							System.out.println("Erro léxico em " + buffer[i]);
+							// str.append("Erro léxico em "+ buffer[i]);
+						} else
 							--i;
+
+						str.append('*');
 
 						tabelaSimbolos(str.toString());
 						str.delete(0, str.length());
@@ -248,18 +263,19 @@ public class Scan {
 						if (buffer[++i] == '/') {
 
 							while ((int) buffer[i] != 10) {
+								// System.out.println(buffer[i]);
 								i++;
 
 							}
 						} else {
 							--i;
-							//tabelaSimbolos(str.toString());
-							Token tk =  new Token("/", "/");
+							// tabelaSimbolos(str.toString());
+							Token tk = new Token("/", "/");
 							tokens.add(tk);
 							str.delete(0, str.length());
 							estado = 1;
 							found = true;
-							
+
 							break;
 						}
 
@@ -279,8 +295,7 @@ public class Scan {
 							i++;
 						}
 
-						
-						strFinal.append("<"+ str.toString() + ", num >\n");
+						strFinal.append("<" + str.toString() + ", num >\n");
 						Token tk = new Token(str.toString(), "num");
 						tokens.add(tk);
 						str.delete(0, str.length());
@@ -294,9 +309,10 @@ public class Scan {
 					break;
 
 				case 5: // reconhecimento de espaço, /n e começo de linha
-					if ((int) buffer[i] == 32 || (int) buffer[i] == 10 || (int) buffer[i]==9) {
-						
-						while ((int) buffer[i] == ' ' || (int) buffer[i] == 10 || (int) buffer[i] == 12 || (int) buffer[i]==9) {
+					if ((int) buffer[i] == 32 || (int) buffer[i] == 10 || (int) buffer[i] == 9) {
+
+						while ((int) buffer[i] == ' ' || (int) buffer[i] == 10 || (int) buffer[i] == 12
+								|| (int) buffer[i] == 9) {
 							i++;
 						}
 						i--;
@@ -308,10 +324,12 @@ public class Scan {
 					}
 
 					break;
-				
-				case 6 : 
-					strFinal.append("erro léxico: "+ buffer[i]+"   ");
-					estado =1;
+
+				case 6:
+					strFinal.append("erro léxico: " + buffer[i] + "   ");
+					erro = true;
+					estado = 1;
+
 					break;
 
 				default:
@@ -320,7 +338,9 @@ public class Scan {
 
 			}
 
-		} catch (Exception e) {		}
+		} catch (Exception e) {
+			return null;
+		}
 
 		OutputStream os = new FileOutputStream("saida.txt");
 		OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -335,11 +355,16 @@ public class Scan {
 
 		bw.close();
 
-		//System.out.println(strFinal.toString());
-		
+		// System.out.println(strFinal.toString());
+
+		if(erro)
+			return null;
 		return tokens;
-		
 
 	}
 
-  }
+	public static void main(String[] args) throws IOException {
+		new Scan().obterTokens();
+	}
+
+}

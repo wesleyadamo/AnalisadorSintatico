@@ -163,13 +163,6 @@ public class AnalisadorSintatico {
 		tabela.put("StmtLista1 )", si.p);
 		tabela.put("StmtLista1 *", si.p);
 
-		
-
-		
-
-		
-		
-
 		si = new StackInput();
 		si.setarProducoa(" ");
 		tabela.put("StmtLista1 else", si.p);
@@ -180,7 +173,7 @@ public class AnalisadorSintatico {
 
 		/////////////////////////////////// Stmt - > forStmt
 		si = new StackInput();
-		
+
 		si.setarProducoa("id");
 		tabela.put("Stmt id", si.p);
 
@@ -218,8 +211,7 @@ public class AnalisadorSintatico {
 		vet = new String[] { ";" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt ;", si.p);
-		
-		
+
 		si = new StackInput();
 		vet = new String[] { "*" };
 		si.setarProducoa(vet);
@@ -234,24 +226,22 @@ public class AnalisadorSintatico {
 		vet = new String[] { "ForStmt" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt for", si.p);
-		
+
 		si = new StackInput();
 		vet = new String[] { "/" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt /", si.p);
-		
+
 		si = new StackInput();
 		vet = new String[] { "ForStmt" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt for", si.p);
-		
-		
+
 		si = new StackInput();
 		vet = new String[] { ")" };
 		si.setarProducoa(vet);
 		tabela.put("Stmt )", si.p);
-		
-		
+
 		si = new StackInput();
 		vet = new String[] { "WhileStmt" };
 		si.setarProducoa(vet);
@@ -272,7 +262,7 @@ public class AnalisadorSintatico {
 		tabela.put("Stmt else", si.p);
 
 		si = new StackInput();
-		vet = new String[] { "Stmt",")", "Atribuicao",";", "OptExpressao",";", "Atribuicao","(", "for" };
+		vet = new String[] { "Stmt", ")", "Atribuicao", ";", "OptExpressao", ";", "Atribuicao", "(", "for" };
 		si.setarProducoa(vet);
 		tabela.put("ForStmt for", si.p);
 
@@ -502,198 +492,182 @@ public class AnalisadorSintatico {
 		int tam = pilha.size();
 		String s = "";
 
-		for (int i = 0; i < tam; i++) {
-			s += " "+pilha.get(i);
+		for (int i = tam - 1; i >= 0; i--) {
+			s += " " + pilha.get(i);
 		}
-		
+
 		tam = entrada.size();
 		String s2 = "";
 
-		for (int i = 0; i < tam; i++) {
-			s2 += " "+entrada.get(i);
+		for (int i = tam - 1; i >= 0; i--) {
+			s2 += " " + entrada.get(i);
 		}
-		
 
-		System.out.println("ESTADO DA PILHA: " + s);
-		System.out.println("ESTADO DA entrada: " + s2);
+		System.out.println("PILHA   : " + s);
+		System.out.println("ENTRADA : " + s2);
 
-		System.out.println();
-		System.out.println();
+		// System.out.println();
+		// System.out.println();
 
 	}
 
 	// retorna o que deve fazer
 	public Producao02 action(String e, String p) {
-		System.out.println("COMPARAR: " + p + " " + e);
+		System.out.println("tabela  : [" + p + "][" + e+"]");
 		return tabela.get(p + " " + e);
 	}
 
 	public static void main(String[] args) throws IOException {
 		AnalisadorSintatico as = new AnalisadorSintatico();
-		
-		
-		
-		
-		
-		
-		
-		
+
 		as.setarTabela();
-	/*	as.entrada.push("}");
-		as.entrada.push("}");
-		as.entrada.push("}");
-		
-		as.entrada.push("}");
-		as.entrada.push(";");
-		
-		as.entrada.push("num");
-		as.entrada.push("+");
-		as.entrada.push("id");
-		
-		as.entrada.push("=");
-		as.entrada.push("id");
-		as.entrada.push("{");
-		
-		
+		/*
+		 * as.entrada.push("}"); as.entrada.push("}"); as.entrada.push("}");
+		 * 
+		 * as.entrada.push("}"); as.entrada.push(";");
+		 * 
+		 * as.entrada.push("num"); as.entrada.push("+"); as.entrada.push("id");
+		 * 
+		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("{");
+		 * 
+		 * 
+		 * 
+		 * as.entrada.push(")");
+		 * 
+		 * as.entrada.push("num");
+		 * 
+		 * as.entrada.push("!="); as.entrada.push("id"); as.entrada.push("(");
+		 * 
+		 * as.entrada.push("while");
+		 * 
+		 * as.entrada.push("{"); as.entrada.push(")");
+		 * 
+		 * as.entrada.push("num"); as.entrada.push("+");
+		 * 
+		 * 
+		 * as.entrada.push("id"); as.entrada.push("="); as.entrada.push("id");
+		 * 
+		 * as.entrada.push(";"); as.entrada.push("num"); as.entrada.push("<");
+		 * 
+		 * as.entrada.push("id"); as.entrada.push(";"); as.entrada.push("num");
+		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("(");
+		 * 
+		 * 
+		 * as.entrada.push("for"); as.entrada.push("{");
+		 * as.entrada.push("else"); as.entrada.push("}"); as.entrada.push(";");
+		 * as.entrada.push("num"); as.entrada.push("+"); as.entrada.push("num");
+		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("{");
+		 * as.entrada.push(")"); as.entrada.push("num"); as.entrada.push(">=");
+		 * as.entrada.push("id"); as.entrada.push("(");
+		 * 
+		 * as.entrada.push("if"); as.entrada.push("id");as.entrada.push("id");
+		 * as.entrada.push("{"); as.entrada.push(")"); as.entrada.push("(");
+		 * as.entrada.push("id"); as.entrada.push("int");
+		 */
 
-		as.entrada.push(")");
-
-		as.entrada.push("num");
-
-		as.entrada.push("!=");
-		as.entrada.push("id");
-		as.entrada.push("(");
-		
-		as.entrada.push("while");
-
-		as.entrada.push("{");
-		as.entrada.push(")");
-
-		as.entrada.push("num");
-		as.entrada.push("+");
-		
-		
-		as.entrada.push("id");
-		as.entrada.push("=");
-		as.entrada.push("id");
-		
-		as.entrada.push(";");
-		as.entrada.push("num");
-		as.entrada.push("<");
-		
-		as.entrada.push("id");
-		as.entrada.push(";");
-		as.entrada.push("num");
-		as.entrada.push("=");
-		as.entrada.push("id");
-		as.entrada.push("(");
-		
-		
-		as.entrada.push("for");
-		as.entrada.push("{");
-		as.entrada.push("else");
-		as.entrada.push("}");
-		as.entrada.push(";");
-		as.entrada.push("num");
-		as.entrada.push("+");
-		as.entrada.push("num");
-		as.entrada.push("=");
-		as.entrada.push("id");
-as.entrada.push("{");
-		as.entrada.push(")");
-		as.entrada.push("num");
-		as.entrada.push(">=");
-		as.entrada.push("id");
-		as.entrada.push("(");
-
-		as.entrada.push("if");
-		as.entrada.push("id");as.entrada.push("id");
-		as.entrada.push("{");
-		as.entrada.push(")");
-		as.entrada.push("(");
-		as.entrada.push("id");
-		as.entrada.push("int");*/
-		
 		Scan s = new Scan();
-		
+
 		ArrayList<Token> tokens = s.obterTokens();
-		
-		
-		System.out.println();
-		for(Token t : tokens){
-			System.out.println(t.getAtributo()+"");
-		}
-		
-		System.out.println();
-		int i;
-		
-		for( i= tokens.size()-1; i >=0 ; i-- )
-		{
-			as.entrada.push(tokens.get(i).getAtributo());
-		}
 
-		Producao02 p2 = as.action(as.entrada.peek(), as.pilha.peek());
+		if (tokens != null) {
 
-		// retira da pilha
-		as.pilha.pop();
+			/*
+			 * System.out.println(); for(Token t : tokens){
+			 * System.out.println(t.getAtributo()+""); }
+			 */
 
-		// empilha a nova producao
-		for (String p : p2.producao) {
-			as.pilha.push(p);
-		}
+			System.out.println();
+			int i;
 
-	//	// as.interar();
-		// testa se as entrada são iguais
-		while (!as.pilha.isEmpty() && !as.entrada.peek().equals("$")) {
-			p2 = as.action(as.entrada.peek(), as.pilha.peek());
-
-			//// as.interar();
-			System.out.println("PILHA NO TOPO ANTES DE REMOVER: " + as.pilha.peek()+""+as.entrada.peek());
-
-			if (!(p2.producao.get(0).equalsIgnoreCase(" "))){
-				System.out.println("aqui pra desempilhar");
-				System.out.println("Retorno: "+p2.producao.get(0));
-				as.pilha.pop();
-
+			for (i = tokens.size() - 1; i >= 0; i--) {
+				as.entrada.push(tokens.get(i).getAtributo());
 			}
-			System.out.println("PILHA NO TOPO DEPOIS DE REMOVER: " + as.pilha.peek());
 
-			// as.interar();
+			Producao02 p2; // = as.action(as.entrada.peek(), as.pilha.peek());
 
-			for (String p : p2.producao) {
-				if (p.equals(" ")) {
-					// as.interar();
-					as.pilha.pop();
-					System.out.println("DESIMPILHAR " + as.entrada.peek());
-					//as.entrada.pop();
-					// as.interar();
+			/*
+			 * // retira da pilha as.pilha.pop();
+			 * 
+			 * // empilha a nova producao for (String p : p2.producao) {
+			 * as.pilha.push(p); }
+			 */
 
-				} else{
-					as.pilha.push(p);
+			// // as.interar();
+			// testa se as entrada são iguais
+
+			String saida = "";
+			while (!as.pilha.isEmpty() && !as.entrada.peek().equals("$")) {
+				p2 = as.action(as.entrada.peek(), as.pilha.peek());
+				saida = "";
+				as.interar();
+				// System.out.println("PILHA NO TOPO ANTES DE REMOVER: " +
+				// as.pilha.peek()+""+as.entrada.peek());
+
+				if (p2 == null) {
+					System.out.println("\nErro Sintático");
+
+					as.interar();
+					break;
 				}
-			}
 
-			// System.out.println("PILHA TOPO" + as.pilha.peek());
-			// System.out.println("entrada TOPO" + as.entrada.peek());
+				// quando não é pra desempilhar
+				if (!(p2.producao.get(0).equalsIgnoreCase(" "))) {
+					// System.out.println("aqui pra desempilhar");
+					// System.out.println("Retorno: "+p2.producao.get(0));
 
-			// compara se as entrada são iguais
-			while (as.pilha.peek().equals(as.entrada.peek()) && !as.pilha.peek().equals("$")) {
+					saida = as.pilha.peek() + " -> ";
+					as.pilha.pop();
+
+				}
+				// System.out.println("PILHA NO TOPO DEPOIS DE REMOVER: " +
+				// as.pilha.peek());
 
 				// as.interar();
-				System.out.println("entrou no igual");
-				System.out.println("PILHA TOPO: " + as.pilha.peek());
-				System.out.println("entrada TOPO: " + as.entrada.peek());
+
+				for (String p : p2.producao) {
+					if (p.equals(" ")) {
+						// as.interar();
+						saida = as.pilha.peek() + " -> ∈ ";
+
+						as.pilha.pop();
+						// System.out.println("DESIMPILHAR " +
+						// as.entrada.peek());
+						// as.entrada.pop();
+						// as.interar();
+
+					} else {
+						saida += " " + p;
+						as.pilha.push(p);
+					}
+				}
+
+				System.out.println("Saida   : " + saida + "\n");
+				// System.out.println("PILHA TOPO" + as.pilha.peek());
+				// System.out.println("entrada TOPO" + as.entrada.peek());
+
 				System.out.println();
-				as.pilha.pop();
-				as.entrada.pop();
+
+				// compara se as entrada são iguais
+				while (as.pilha.peek().equals(as.entrada.peek()) && !as.pilha.peek().equals("$")) {
+
+					as.interar();
+					// System.out.println("entrou no igual");
+					// System.out.println("PILHA TOPO: " + as.pilha.peek());
+					/// System.out.println("entrada TOPO: " +
+					// as.entrada.peek());
+					// System.out.println();
+					as.pilha.pop();
+					as.entrada.pop();
+					System.out.println();
+
+				}
 
 			}
 
+			System.out.println("PILHA NO TOPO FINAL: " + as.pilha.peek());
+			System.out.println("entrada: " + as.entrada.peek());
+
 		}
-
-		System.out.println("PILHA NO TOPO FINAL: " + as.pilha.peek());
-		System.out.println("entrada: " + as.entrada.peek());
-
 	}
 
 }

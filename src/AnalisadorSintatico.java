@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class AnalisadorSintatico {
-
+/*
 	// indices dos tokens
 	ArrayList<String> indice = new ArrayList<>();
 
@@ -26,11 +26,11 @@ public class AnalisadorSintatico {
 		System.out.println("Para: " + p.getCabeca());
 		System.out.println();
 
-		/*
+		
 		 * De acordo com o tamanho da produção, reduz a quantidade de estados da
 		 * pilha de estados
 		 * 
-		 */
+		 
 		for (int i = 0; i < p.getTamanho(); i++) {
 			estado.pop();
 		}
@@ -171,11 +171,11 @@ public class AnalisadorSintatico {
 		// pega o indice que será usado para acessar a tabela
 		// int indice = an.indice.indexOf(entrada);
 
-		/*
+		
 		 * an.input.push(new Token("$")); an.input.push(new Token("id"));
 		 * an.input.push(new Token("+")); an.input.push(new Token("id"));
 		 * an.input.push(new Token("*")); an.input.push(new Token("id"));
-		 */
+		 
 
 		// estado inicial
 		an.estado.push(0);
@@ -219,6 +219,6 @@ public class AnalisadorSintatico {
 
 		}
 
-	}
+	}*/
 
 }
