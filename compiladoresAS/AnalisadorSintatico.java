@@ -42,7 +42,7 @@ public class AnalisadorSintatico {
 		///////////////////////////////// // listaArgumeto -> ( ->>
 		///////////////////////////////// listaArgumeto - > &
 		si = new StackInput();
-		si.setarProducoa(" ");
+		si.setarProducoa(" "); 
 		tabela.put("Lista_Argumento )", si.p);
 
 		si = new StackInput();
@@ -519,19 +519,22 @@ public class AnalisadorSintatico {
 
 	public static void main(String[] args) throws IOException {
 		AnalisadorSintatico as = new AnalisadorSintatico();
-
+		// cria a  tabela e inicia a pilha de simbolos e da entrada
 		as.setarTabela();
-
+                // classe que faz a análise léxica
 		Scan s = new Scan();
-
+		// obtem um array de tokens
 		ArrayList<Token> tokens = s.obterTokens();
-
+		// verifica se não deu erro léxico
 		if (tokens != null) {
 
 
 			System.out.println();
 			int i;
-
+			/* adiciona todos os tokens na pilha da entrada 
+			inicia do final do array de tokens até o inicio, para que o primeiro token que foi reconhecido na
+			analise léxica fique no top da pilha de entrada
+			*/
 			for (i = tokens.size() - 1; i >= 0; i--) {
 				as.entrada.push(tokens.get(i).getAtributo());
 			}
@@ -539,11 +542,16 @@ public class AnalisadorSintatico {
 			Producao p2; // = as.action(as.entrada.peek(), as.pilha.peek());
 
 			String saida = "";
+			// enquanto as pilhas não estiverem vazias
 			while (!as.pilha.isEmpty() && !as.entrada.peek().equals("$")) {
+				// chama o método action e o retorno é uma produção que será colocada no lugar 
+				// do simbolo atual da pilha de simbolos
 				p2 = as.action(as.entrada.peek(), as.pilha.peek());
 				saida = "";
+				// mostra os estados das pilhas
 				as.iterar();
-
+				// verifica se o retorno foi vazio, configurando um erro, pois não foi achada entrada na
+				// tabela de acordo com os as entradas passada para o método
 				if (p2 == null) {
 					System.out.println("\nErro Sintático");
 
@@ -551,21 +559,23 @@ public class AnalisadorSintatico {
 					break;
 				}
 
-				// quando não é pra desempilhar
+				// quando a produção retornada não é do tipo algumSimbolo -> ∈
 				if (!(p2.producao.get(0).equalsIgnoreCase(" "))) {
-
+ 
 					saida = as.pilha.peek() + " -> ";
+					// retira o simbolo do topo da pilha
 					as.pilha.pop();
 
 				}
-
+                                // iterar sobre a produção retornada
 				for (String p : p2.producao) {
+					// se for do tipo algumSimbolo -> ∈
 					if (p.equals(" ")) {
 						// as.interar();
 						saida = as.pilha.peek() + " -> ∈ ";
-
+                                                // apenas desempilho o tempo 
 						as.pilha.pop();
-
+				        // se não for, coloco a produção retorna na pilha de simbolos					
 					} else {
 						saida += " " + p;
 						as.pilha.push(p);
@@ -576,7 +586,8 @@ public class AnalisadorSintatico {
 
 				System.out.println();
 
-				// compara se as entrada são iguais
+				// compara se os topos das pilhas são iguais
+				// enquanto forem , apenas desempilha os topos
 				while (as.pilha.peek().equals(as.entrada.peek()) && !as.pilha.peek().equals("$")) {
 
 					as.iterar();
@@ -587,8 +598,9 @@ public class AnalisadorSintatico {
 
 				}
 
-			}
+			}// fim do while
 
+			// aceita a entrada se os topos das pilhas estiverem $
 			if(as.pilha.peek().equals("$") && as.entrada.peek().equals("$")){
 				System.out.println("\n\n Entrada aceita!");
 				System.out.println("Pilha: " + as.pilha.peek());
