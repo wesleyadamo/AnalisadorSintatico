@@ -41,6 +41,9 @@ public class AnalisadorSintatico {
 
 		///////////////////////////////// // listaArgumeto -> ( ->>
 		///////////////////////////////// listaArgumeto - > &
+		
+		// esse é o cado que a produção é vazia, no caso, Lista-Argumento -> ∈, então o corpo da produção é
+		// uma string vazia
 		si = new StackInput();
 		si.setarProducoa(" "); 
 		tabela.put("Lista_Argumento )", si.p);
