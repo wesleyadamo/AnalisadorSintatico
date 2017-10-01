@@ -13,7 +13,7 @@ import analisadorLexico.Token;
 
 public class AnalisadorSintatico {
 
-	Map<String, Producao02> tabela = new HashMap<String, Producao02>();
+	Map<String, Producao> tabela = new HashMap<String, Producao>();
 
 	Stack<String> pilha = new Stack<String>();
 	Stack<String> entrada = new Stack<String>();
@@ -487,7 +487,7 @@ public class AnalisadorSintatico {
 
 	}
 
-	public void interar() {
+	public void iterar() {
 
 		int tam = pilha.size();
 		String s = "";
@@ -512,8 +512,8 @@ public class AnalisadorSintatico {
 	}
 
 	// retorna o que deve fazer
-	public Producao02 action(String e, String p) {
-		System.out.println("tabela  : [" + p + "][" + e+"]");
+	public Producao action(String e, String p) {
+		System.out.println("tabela  : [" + p + "][" + e + "]");
 		return tabela.get(p + " " + e);
 	}
 
@@ -521,49 +521,6 @@ public class AnalisadorSintatico {
 		AnalisadorSintatico as = new AnalisadorSintatico();
 
 		as.setarTabela();
-		/*
-		 * as.entrada.push("}"); as.entrada.push("}"); as.entrada.push("}");
-		 * 
-		 * as.entrada.push("}"); as.entrada.push(";");
-		 * 
-		 * as.entrada.push("num"); as.entrada.push("+"); as.entrada.push("id");
-		 * 
-		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("{");
-		 * 
-		 * 
-		 * 
-		 * as.entrada.push(")");
-		 * 
-		 * as.entrada.push("num");
-		 * 
-		 * as.entrada.push("!="); as.entrada.push("id"); as.entrada.push("(");
-		 * 
-		 * as.entrada.push("while");
-		 * 
-		 * as.entrada.push("{"); as.entrada.push(")");
-		 * 
-		 * as.entrada.push("num"); as.entrada.push("+");
-		 * 
-		 * 
-		 * as.entrada.push("id"); as.entrada.push("="); as.entrada.push("id");
-		 * 
-		 * as.entrada.push(";"); as.entrada.push("num"); as.entrada.push("<");
-		 * 
-		 * as.entrada.push("id"); as.entrada.push(";"); as.entrada.push("num");
-		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("(");
-		 * 
-		 * 
-		 * as.entrada.push("for"); as.entrada.push("{");
-		 * as.entrada.push("else"); as.entrada.push("}"); as.entrada.push(";");
-		 * as.entrada.push("num"); as.entrada.push("+"); as.entrada.push("num");
-		 * as.entrada.push("="); as.entrada.push("id"); as.entrada.push("{");
-		 * as.entrada.push(")"); as.entrada.push("num"); as.entrada.push(">=");
-		 * as.entrada.push("id"); as.entrada.push("(");
-		 * 
-		 * as.entrada.push("if"); as.entrada.push("id");as.entrada.push("id");
-		 * as.entrada.push("{"); as.entrada.push(")"); as.entrada.push("(");
-		 * as.entrada.push("id"); as.entrada.push("int");
-		 */
 
 		Scan s = new Scan();
 
@@ -571,10 +528,6 @@ public class AnalisadorSintatico {
 
 		if (tokens != null) {
 
-			/*
-			 * System.out.println(); for(Token t : tokens){
-			 * System.out.println(t.getAtributo()+""); }
-			 */
 
 			System.out.println();
 			int i;
@@ -583,46 +536,28 @@ public class AnalisadorSintatico {
 				as.entrada.push(tokens.get(i).getAtributo());
 			}
 
-			Producao02 p2; // = as.action(as.entrada.peek(), as.pilha.peek());
-
-			/*
-			 * // retira da pilha as.pilha.pop();
-			 * 
-			 * // empilha a nova producao for (String p : p2.producao) {
-			 * as.pilha.push(p); }
-			 */
-
-			// // as.interar();
-			// testa se as entrada são iguais
+			Producao p2; // = as.action(as.entrada.peek(), as.pilha.peek());
 
 			String saida = "";
 			while (!as.pilha.isEmpty() && !as.entrada.peek().equals("$")) {
 				p2 = as.action(as.entrada.peek(), as.pilha.peek());
 				saida = "";
-				as.interar();
-				// System.out.println("PILHA NO TOPO ANTES DE REMOVER: " +
-				// as.pilha.peek()+""+as.entrada.peek());
+				as.iterar();
 
 				if (p2 == null) {
 					System.out.println("\nErro Sintático");
 
-					as.interar();
+					as.iterar();
 					break;
 				}
 
 				// quando não é pra desempilhar
 				if (!(p2.producao.get(0).equalsIgnoreCase(" "))) {
-					// System.out.println("aqui pra desempilhar");
-					// System.out.println("Retorno: "+p2.producao.get(0));
 
 					saida = as.pilha.peek() + " -> ";
 					as.pilha.pop();
 
 				}
-				// System.out.println("PILHA NO TOPO DEPOIS DE REMOVER: " +
-				// as.pilha.peek());
-
-				// as.interar();
 
 				for (String p : p2.producao) {
 					if (p.equals(" ")) {
@@ -630,10 +565,6 @@ public class AnalisadorSintatico {
 						saida = as.pilha.peek() + " -> ∈ ";
 
 						as.pilha.pop();
-						// System.out.println("DESIMPILHAR " +
-						// as.entrada.peek());
-						// as.entrada.pop();
-						// as.interar();
 
 					} else {
 						saida += " " + p;
@@ -642,20 +573,14 @@ public class AnalisadorSintatico {
 				}
 
 				System.out.println("Saida   : " + saida + "\n");
-				// System.out.println("PILHA TOPO" + as.pilha.peek());
-				// System.out.println("entrada TOPO" + as.entrada.peek());
 
 				System.out.println();
 
 				// compara se as entrada são iguais
 				while (as.pilha.peek().equals(as.entrada.peek()) && !as.pilha.peek().equals("$")) {
 
-					as.interar();
-					// System.out.println("entrou no igual");
-					// System.out.println("PILHA TOPO: " + as.pilha.peek());
-					/// System.out.println("entrada TOPO: " +
-					// as.entrada.peek());
-					// System.out.println();
+					as.iterar();
+
 					as.pilha.pop();
 					as.entrada.pop();
 					System.out.println();
@@ -664,8 +589,12 @@ public class AnalisadorSintatico {
 
 			}
 
-			System.out.println("PILHA NO TOPO FINAL: " + as.pilha.peek());
-			System.out.println("entrada: " + as.entrada.peek());
+			if(as.pilha.peek().equals("$") && as.entrada.peek().equals("$")){
+				System.out.println("\n\n Entrada aceita!");
+				System.out.println("Pilha: " + as.pilha.peek());
+				System.out.println("entrada: " + as.entrada.peek());
+			}
+			
 
 		}
 	}

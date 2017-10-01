@@ -194,6 +194,17 @@ public class Scan {
 							break;
 
 						}
+					if(buffer[i] == ','){
+						Token tk = new Token(",", ",");
+						tokens.add(tk);
+						str.delete(0, str.length());
+						estado = 1;
+						found = true;
+
+						break;
+
+						
+					}
 
 					if (!found) {
 						estado++;

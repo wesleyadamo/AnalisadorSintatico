@@ -4,7 +4,7 @@ public class StackInput {
 
 	String entrada;
 	String pilha;
-	Producao02 p = new Producao02();
+	Producao p = new Producao();
 
 	public void setarProducoa(String[] pr) {
 		for (String p1 : pr)
